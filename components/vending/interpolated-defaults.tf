@@ -8,7 +8,7 @@ module "ctags" {
 }
 
 data "azuread_group" "sub_reader" {
-  display_name     = "DTS Reader (sub:dts-innovation-prod)"
+  display_name     = "DTS Readers (sub:dts-innovation-prod)"
   security_enabled = true
 }
 
@@ -23,5 +23,5 @@ data "azurerm_client_config" "this" {}
 
 locals {
   rg_names = { for key, value in var.resource_groups : key => "rg-${key}-${var.env}" }
-  tags     = { for key, value in var.resource_groups : key => merge(module.ctags.common_tags, { "expiry_date" = value.expiry_date, "owner" = key }) }
+  tags     = { for key, value in var.resource_groups : key => merge(module.ctags.common_tags, { "expiry_date" = value.end_date, "owner" = key }) }
 }
