@@ -31,4 +31,9 @@ resource "azuread_group_member" "contributor" {
   member_object_id = azuread_group.contributor[each.key].object_id
 }
 
-//define budget with alert to owner_email.
+resource "azurerm_role_assignment" "contributor" {
+  for_each             = local.resource_groups
+  scope                = azurerm_resource_group.this[each.key].id
+  role_definition_name = "Contributor"
+  principal_id         = azuread_group.contributor[each.key].object_id
+}
