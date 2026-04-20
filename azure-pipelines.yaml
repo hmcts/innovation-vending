@@ -52,7 +52,7 @@ stages:
               keyvaultSecret: "azure-devops-sp-token"
               serviceConnection: "azurerm-sandbox"
               overrideAction: ${{ parameters.overrideAction }}
-  - stage: innovation-vending
+  - stage: Innovation_Vending
     dependsOn: Precheck
     jobs:
       - job: TerraformPlanApply
