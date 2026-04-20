@@ -1,8 +1,11 @@
 variable "resource_groups" {
   type = map(object({
-    end_date         = string
-    team_entra_group = string
-    location         = optional(string, "uksouth")
+    end_date = string
+    team_entra_group = object({
+      name     = string
+      existing = optional(bool, true)
+    })
+    location = optional(string, "uksouth")
   }))
   default = {}
 }

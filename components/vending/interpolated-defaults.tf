@@ -13,8 +13,8 @@ data "azuread_group" "sub_reader" {
 }
 
 data "azuread_group" "team_groups" {
-  for_each         = var.resource_groups
-  display_name     = each.value.team_entra_group
+  for_each         = { for key, value in var.resource_groups : key => value if value.team_entra_group.existing }
+  display_name     = each.value.team_entra_group.name
   security_enabled = true
 }
 

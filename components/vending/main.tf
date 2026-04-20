@@ -11,6 +11,12 @@ resource "azuread_group_member" "sub_readers" {
   member_object_id = data.azuread_group.team_groups[each.key].id
 }
 
+resource "azuread_group" "team_groups" {
+  for_each         = { for key, value in var.resource_groups : key => value if value.team_entra_group.existing == false }
+  display_name     = each.value.team_entra_group.name
+  security_enabled = true
+}
+
 resource "azuread_group" "contributor" {
   for_each         = var.resource_groups
   display_name     = "DTS Innovation ${each.key} RG Contributor SC"
@@ -28,12 +34,12 @@ resource "azuread_group" "contributor_eligible" {
 resource "azuread_group_member" "contributor_eligible" {
   for_each         = var.resource_groups
   group_object_id  = azuread_group.contributor_eligible[each.key].id
-  member_object_id = data.azuread_group.team_groups[each.key].id
+  member_object_id = each.value.team_entra_group.existing ? data.azuread_group.team_groups[each.key].id : azuread_group.team_groups[each.key].id
 }
 
 resource "azurerm_role_assignment" "reader" {
   for_each             = var.resource_groups
-  principal_id         = data.azuread_group.team_groups[each.key].id
+  principal_id         = each.value.team_entra_group.existing ? data.azuread_group.team_groups[each.key].id : azuread_group.team_groups[each.key].id
   scope                = data.azurerm_subscription.this.id
   role_definition_name = "Reader"
 }
