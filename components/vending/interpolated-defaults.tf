@@ -22,6 +22,6 @@ data "azurerm_subscription" "this" {}
 data "azurerm_client_config" "this" {}
 
 locals {
-  rg_names = { for key, value in var.resource_groups : key => "rg-${key}-${var.env}" }
+  rg_names = { for key, value in var.resource_groups : key => "rg-${key}-innovation-${var.env}" }
   tags     = { for key, value in var.resource_groups : key => merge(module.ctags.common_tags, { "expiry_date" = value.end_date, "owner" = key }) }
 }

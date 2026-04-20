@@ -7,8 +7,8 @@ resource "azurerm_resource_group" "this" {
 
 resource "azuread_group_member" "sub_readers" {
   for_each         = var.resource_groups
-  group_object_id  = data.azuread_group.sub_reader.id
-  member_object_id = data.azuread_group.team_groups[each.key].id
+  group_object_id  = data.azuread_group.sub_reader.object_id
+  member_object_id = each.value.team_entra_group.existing ? data.azuread_group.team_groups[each.key].object_id : azuread_group.team_groups[each.key].object_id
 }
 
 resource "azuread_group" "team_groups" {
