@@ -23,14 +23,6 @@ parameters:
       - plan
       - apply
       - destroy
-  - name: environment_components
-    type: object
-    default:
-      - deployment: "vending"
-        environment: "prod"
-        component: "vending"
-        service_connection: "DTS-INNOVATION-PROD"
-        dependsOn: "Precheck"
 
 variables:
   - name: timeoutInMinutes
@@ -41,6 +33,10 @@ variables:
     value: innovation
   - name: terraformInitSubscription
     value: 04d27a32-7a07-48b3-95b8-3c8691e1a263
+  - name: tenant_id
+    value: "531ff96d-0ae9-462a-8d2d-bec7c0b42082"
+  - name: client_id
+    value: "5a03bb64-bdac-4187-b9c4-8936e3809656"
   - template: vars/input-variables.yaml@cnp-azuredevops-libraries
 
 stages:
@@ -56,21 +52,29 @@ stages:
               keyvaultSecret: "azure-devops-sp-token"
               serviceConnection: "azurerm-sandbox"
               overrideAction: ${{ parameters.overrideAction }}
-
-  - ${{ each deployment in parameters.environment_components }}:
-      - stage: ${{ deployment.deployment }}
-        dependsOn: ${{ deployment.dependsOn }}
-        jobs:
-          - job: TerraformPlanApply
-            pool:
-              name: hmcts-cftptl-agent-pool
-            timeoutInMinutes: ${{ variables.timeoutInMinutes }}
-            steps:
-              - template: steps/terraform.yaml@cnp-azuredevops-libraries
-                parameters:
-                  overrideAction: ${{ parameters.overrideAction }}
-                  environment: ${{ deployment.environment}}
-                  component: ${{ deployment.component }}
-                  serviceConnection: ${{ deployment.service_connection }}
-                  product: ${{ variables.product }}
-                  terraformInitSubscription: ${{ variables.terraformInitSubscription }}
+  - stage: innovation-vending
+    dependsOn: Precheck
+    jobs:
+      - job: TerraformPlanApply
+        pool:
+          name: hmcts-cftptl-agent-pool
+        timeoutInMinutes: ${{ variables.timeoutInMinutes }}
+        steps:
+          - task: AzureKeyVault@2
+            inputs:
+              azureSubscription: "DTS-SHAREDSERVICES-PROD"
+              KeyVaultName: "access-packages-kv"
+              SecretsFilter: "client-secret"
+              RunAsPreJob: false
+          - template: steps/terraform.yaml@cnp-azuredevops-libraries
+            parameters:
+              overrideAction: ${{ parameters.overrideAction }}
+              environment: prod
+              component: vending
+              serviceConnection: DTS-INNOVATION-PROD
+              product: innovation
+              terraformInitSubscription: ${{ variables.terraformInitSubscription }}
+              planCommandOptions: >
+                -var client_id=${{ variables.client_id }} -var
+                client_secret=$(client-secret) -var tenant_id=${{
+                variables.tenant_id }}

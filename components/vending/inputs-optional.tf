@@ -5,5 +5,19 @@ variable "resource_groups" {
     location         = optional(string, "uksouth")
   }))
   default = {}
+}
 
+variable "tenant_id" {
+  sensitive = true
+  default   = ""
+}
+
+variable "client_id" {
+  sensitive = true
+  default   = ""
+}
+
+variable "client_secret" {
+  sensitive = true
+  default   = ""
 }
