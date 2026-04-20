@@ -25,12 +25,6 @@ resource "azuread_group_member" "sub_readers" {
   member_object_id = azuread_group.contributor_eligible[each.key].object_id
 }
 
-resource "azuread_group_member" "contributor" {
-  for_each         = local.resource_groups
-  group_object_id  = data.azuread_group.sub_contributor.object_id
-  member_object_id = azuread_group.contributor[each.key].object_id
-}
-
 resource "azurerm_role_assignment" "contributor" {
   for_each             = local.resource_groups
   scope                = azurerm_resource_group.this[each.key].id
