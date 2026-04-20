@@ -7,14 +7,14 @@ resource "azurerm_resource_group" "this" {
 
 resource "azuread_group" "contributor" {
   for_each         = var.resource_groups
-  display_name     = "DTS Innovation ${var.env} ${local.rg_names[each.key]} RG Contributor SC"
+  display_name     = "DTS Innovation ${var.env} ${local.rg_names[each.key]} Contributor SC"
   security_enabled = true
   description      = "Allows contributor access to the ${local.rg_names[each.key]} resource group in DTS-INNOVATION-PROD. Access should be gained via an access package."
 }
 
 resource "azuread_group" "contributor_eligible" {
   for_each         = var.resource_groups
-  display_name     = "DTS Innovation ${var.env} ${local.rg_names[each.key]} RG Contributor Eligible SC"
+  display_name     = "DTS Innovation ${var.env} ${local.rg_names[each.key]} Contributor Eligible SC"
   security_enabled = true
   description      = "Allows users to request contributor access to the ${local.rg_names[each.key]} resource group in DTS-INNOVATION-PROD."
 }

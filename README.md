@@ -86,7 +86,7 @@ Delete the entry from the `resource_groups` map in [environments/prod/prod.tfvar
 
 > **Important:** After a resource group is created, users who need access must be added to the **Contributor Eligible** Entra ID group for that resource group. The group is named:
 >
-> `DTS Innovation prod rg-<key>-innovation-prod RG Contributor Eligible SC`
+> `DTS Innovation prod rg-<key>-innovation-prod Contributor Eligible SC`
 >
 > Only members of this group can request Contributor access via the self-approval access package. Without being in this group, users will not be able to request access.
 
@@ -109,8 +109,8 @@ For each key in `resource_groups`, the following resources are created:
 | Resource | Name / Description |
 |---|---|
 | Resource Group | `rg-<key>-innovation-prod` |
-| Contributor Group | `DTS Innovation prod rg-<key>-innovation-prod RG Contributor SC` |
-| Contributor Eligible Group | `DTS Innovation prod rg-<key>-innovation-prod RG Contributor Eligible SC` |
+| Contributor Group | `DTS Innovation prod rg-<key>-innovation-prod Contributor SC` |
+| Contributor Eligible Group | `DTS Innovation prod rg-<key>-innovation-prod Contributor Eligible SC` |
 | Subscription Readers membership | Contributor Eligible group added to `DTS Readers (sub:dts-innovation-prod)` |
 | Subscription Contributors membership | Contributor group added to `DTS Contributors (sub:dts-innovation-prod)` |
 | Access Package | Self-approval contributor access (8 hours) |
