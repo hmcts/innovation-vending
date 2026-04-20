@@ -33,7 +33,7 @@ resource "azuread_group" "contributor_eligible" {
 
 resource "azuread_group_member" "contributor_eligible" {
   for_each         = var.resource_groups
-  group_object_id  = azuread_group.contributor_eligible[each.key].id
+  group_object_id  = azuread_group.contributor_eligible[each.key].object_id
   member_object_id = each.value.team_entra_group.existing ? data.azuread_group.team_groups[each.key].object_id : azuread_group.team_groups[each.key].object_id
 }
 
@@ -46,7 +46,7 @@ resource "azurerm_role_assignment" "reader" {
 
 resource "azurerm_role_assignment" "contributor" {
   for_each             = var.resource_groups
-  principal_id         = azuread_group.contributor[each.key].id
+  principal_id         = azuread_group.contributor[each.key].object_id
   scope                = azurerm_resource_group.this[each.key].id
   role_definition_name = "Contributor"
 }
