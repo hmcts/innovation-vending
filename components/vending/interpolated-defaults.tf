@@ -8,20 +8,23 @@ module "ctags" {
 }
 
 data "azuread_group" "sub_reader" {
-  display_name     = "DTS Reader (sub:dts-innovation-prod)"
+  display_name     = "DTS Readers (sub:dts-innovation-prod)"
   security_enabled = true
 }
 
-data "azuread_group" "team_groups" {
-  for_each         = var.resource_groups
-  display_name     = each.value.team_entra_group
+data "azuread_group" "sub_contributor" {
+  display_name     = "DTS Contributors (sub:dts-innovation-prod)"
   security_enabled = true
 }
 
 data "azurerm_subscription" "this" {}
 data "azurerm_client_config" "this" {}
 
+resource "time_static" "creation_datetime" {
+  for_each = var.resource_groups
+}
+
 locals {
-  rg_names = { for key, value in var.resource_groups : key => "rg-${key}-${var.env}" }
-  tags     = { for key, value in var.resource_groups : key => merge(module.ctags.common_tags, { "expiry_date" = value.expiry_date, "owner" = key }) }
+  rg_names = { for key, value in var.resource_groups : key => "rg-${key}-innovation-${var.env}" }
+  tags     = { for key, value in var.resource_groups : key => merge(module.ctags.common_tags, { "expiry_date" = value.end_date, "owner" = lookup(value.owner, "team_name", value.owner.name), "owner_email" = value.owner.email }) }
 }
