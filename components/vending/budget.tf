@@ -1,5 +1,5 @@
 resource "azurerm_consumption_budget_resource_group" "this" {
-  for_each          = var.resource_groups
+  for_each          = local.resource_groups
   name              = local.rg_names[each.key]
   resource_group_id = azurerm_resource_group.this[each.key].id
 

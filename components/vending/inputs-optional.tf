@@ -1,5 +1,5 @@
 variable "resource_groups" {
-  type = map(object({
+  type = list(object({
     end_date = string
     owner = object({
       team_name = optional(string)
@@ -9,7 +9,7 @@ variable "resource_groups" {
     location = optional(string, "uksouth")
     budget   = optional(number, 1000)
   }))
-  default = {}
+  default = []
 }
 
 variable "tenant_id" {

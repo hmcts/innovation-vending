@@ -6,27 +6,27 @@ resource "azuread_access_package_catalog" "innovation" {
 }
 
 resource "azuread_access_package_resource_catalog_association" "contributor" {
-  for_each               = var.resource_groups
+  for_each               = local.resource_groups
   catalog_id             = azuread_access_package_catalog.innovation.id
   resource_origin_id     = azuread_group.contributor[each.key].object_id
   resource_origin_system = "AadGroup"
 }
 
 resource "azuread_access_package" "contributor" {
-  for_each     = var.resource_groups
+  for_each     = local.resource_groups
   display_name = "DTS Innovation ${each.key} RG Contributor"
   description  = "Grants contributor access to the ${local.rg_names[each.key]} resource group in DTS-INNOVATION-PROD."
   catalog_id   = azuread_access_package_catalog.innovation.id
 }
 
 resource "azuread_access_package_resource_package_association" "contributor" {
-  for_each                        = var.resource_groups
+  for_each                        = local.resource_groups
   access_package_id               = azuread_access_package.contributor[each.key].id
   catalog_resource_association_id = azuread_access_package_resource_catalog_association.contributor[each.key].id
 }
 
 resource "azuread_access_package_assignment_policy" "self_approval" {
-  for_each          = var.resource_groups
+  for_each          = local.resource_groups
   access_package_id = azuread_access_package.contributor[each.key].id
   display_name      = "Self Approval - 8 Hours"
   description       = "Self-approval policy for contributor access to ${local.rg_names[each.key]}. Access lasts 8 hours."

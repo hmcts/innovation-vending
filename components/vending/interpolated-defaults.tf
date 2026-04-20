@@ -21,10 +21,11 @@ data "azurerm_subscription" "this" {}
 data "azurerm_client_config" "this" {}
 
 resource "time_static" "creation_datetime" {
-  for_each = var.resource_groups
+  for_each = local.resource_groups
 }
 
 locals {
-  rg_names = { for key, value in var.resource_groups : key => "rg-${key}-innovation-${var.env}" }
-  tags     = { for key, value in var.resource_groups : key => merge(module.ctags.common_tags, { "expiry_date" = value.end_date, "owner" = value.owner.team_name != null ? value.owner.team_name : value.owner.name, "owner_email" = value.owner.email }) }
+  resource_groups = { for idx, value in var.resource_groups : format("%03d", idx + 1) => value }
+  rg_names        = { for key, value in local.resource_groups : key => "rg-${key}-innovation-${var.env}" }
+  tags            = { for key, value in local.resource_groups : key => merge(module.ctags.common_tags, { "expiry_date" = value.end_date, "owner" = value.owner.team_name != null ? value.owner.team_name : value.owner.name, "owner_email" = value.owner.email }) }
 }
