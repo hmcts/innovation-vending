@@ -26,5 +26,5 @@ resource "time_static" "creation_datetime" {
 
 locals {
   rg_names = { for key, value in var.resource_groups : key => "rg-${key}-innovation-${var.env}" }
-  tags     = { for key, value in var.resource_groups : key => merge(module.ctags.common_tags, { "expiry_date" = value.end_date, "owner" = lookup(value.owner, "team_name", value.owner.name), "owner_email" = value.owner.email }) }
+  tags     = { for key, value in var.resource_groups : key => merge(module.ctags.common_tags, { "expiry_date" = value.end_date, "owner" = value.owner.team_name != null ? value.owner.team_name : value.owner.name, "owner_email" = value.owner.email }) }
 }

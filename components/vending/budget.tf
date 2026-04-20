@@ -7,7 +7,7 @@ resource "azurerm_consumption_budget_resource_group" "this" {
   time_grain = "Monthly"
 
   time_period {
-    start_date = time_static.creation_datetime[each.key].rfc3339
+    start_date = formatdate("YYYY-MM-01'T'00:00:00Z", time_static.creation_datetime[each.key].rfc3339)
   }
 
   notification {
