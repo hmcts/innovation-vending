@@ -1,7 +1,7 @@
 variable "resource_groups" {
   type = map(object({
     end_date = string
-    onwer = object({
+    owner = object({
       team_name = optional(string)
       name      = string
       email     = string
