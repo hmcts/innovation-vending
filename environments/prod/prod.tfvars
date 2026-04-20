@@ -1,15 +1,17 @@
 resource_groups = {
   "ai" = {
     end_date = "2026-12-31"
-    team_entra_group = {
-      name     = "DTS Innovation AI Team"
-      existing = false
+    owner = {
+      name  = "Francis Webb"
+      email = "Francis.Webb1@justice.gov.uk"
     }
   }
   "platops" = {
     end_date = "2026-12-31"
-    team_entra_group = {
-      name = "DTS Platform Operations SC"
+    owner = {
+      team_name = "DTS Platform Operations"
+      name      = "Alex Bance"
+      email     = "alex.bance@justice.gov.uk"
     }
   }
 }

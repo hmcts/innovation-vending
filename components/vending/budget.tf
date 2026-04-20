@@ -1,0 +1,30 @@
+resource "azurerm_consumption_budget_resource_group" "this" {
+  for_each          = var.resource_groups
+  name              = local.rg_names[each.key]
+  resource_group_id = azurerm_resource_group.this[each.key].id
+
+  amount     = each.value.budget
+  time_grain = "Monthly"
+
+  time_period {
+    start_date = time_static.creation_datetime[each.key].rfc3339
+  }
+
+  notification {
+    enabled        = true
+    threshold      = 90.0
+    operator       = "EqualTo"
+    threshold_type = "Actual"
+
+    contact_emails = [each.value.owner.email]
+  }
+
+  notification {
+    enabled        = true
+    threshold      = 100.0
+    operator       = "EqualTo"
+    threshold_type = "Actual"
+
+    contact_emails = [each.value.owner.email]
+  }
+}
