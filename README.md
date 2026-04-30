@@ -16,28 +16,29 @@ Changes are applied automatically via Azure DevOps when a PR is merged to `main`
 ## How to add a new resource group
 
 1. Open [environments/prod/prod.tfvars](environments/prod/prod.tfvars).
-2. Add a new object to the end of the `resource_groups` list:
+2. Add a new entry to the `resource_groups` map using the next available 3-digit key:
 
 ```hcl
-resource_groups = [
+resource_groups = {
   # ... existing entries ...
 
-  {
+  "003" = {
     end_date = "YYYY-MM-DD"
     owner = {
       name  = "Full Name"
       email = "email@justice.gov.uk"
     }
-  },
-]
+  }
+}
 ```
 
-Terraform automatically assigns each entry a 3-digit identifier based on its position in the list (`001`, `002`, `003`, …). This identifier is used in resource group names and Entra group names — you do not need to provide one.
+The map key is a 3-digit number (`"001"`, `"002"`, `"003"`, …) that you assign manually. Use the next sequential number after the highest existing key. This identifier is used in resource group names and Entra group names.
 
-> **Important:** Always add new entries to the **end** of the list. Inserting an entry in the middle or reordering the list will change the identifiers of subsequent entries, causing Terraform to destroy and recreate those resources.
+> **Important:** Once assigned, never change or reuse a key. Since the key is part of the Terraform resource address, changing it will destroy and recreate the associated resources.
 
 | Field | Required | Description |
 |---|---|---|
+| **key** (e.g. `"001"`) | Yes | 3-digit identifier. Used in the resource group name (`rg-<key>-innovation-prod`) and Entra group names. |
 | `end_date` | Yes | Expiry date for the resource group (tagged on the resource), format `YYYY-MM-DD`. |
 | `owner.name` | Yes | Name of the owner (individual or point of contact). |
 | `owner.email` | Yes | Email address of the owner. Used for budget alert notifications. |
@@ -48,19 +49,19 @@ Terraform automatically assigns each entry a 3-digit identifier based on its pos
 ### Example — individual owner
 
 ```hcl
-{
+"001" = {
   end_date = "2026-12-31"
   owner = {
     name  = "Alex Bance"
     email = "alex.bance@justice.gov.uk"
   }
-},
+}
 ```
 
 ### Example — team owner with custom budget
 
 ```hcl
-{
+"002" = {
   end_date = "2026-12-31"
   owner = {
     team_name = "DTS Platform Operations"
@@ -68,24 +69,22 @@ Terraform automatically assigns each entry a 3-digit identifier based on its pos
     email     = "alex.bance@justice.gov.uk"
   }
   budget = 2000
-},
+}
 ```
 
 ---
 
 ## How to update an existing resource group
 
-Edit the relevant entry in [environments/prod/prod.tfvars](environments/prod/prod.tfvars) and raise a PR. Common changes include extending the `end_date`, updating the `owner`, or adjusting the `budget`. Do **not** change the position of the entry in the list.
+Edit the relevant entry in [environments/prod/prod.tfvars](environments/prod/prod.tfvars) and raise a PR. Common changes include extending the `end_date`, updating the `owner`, or adjusting the `budget`. Do **not** change the entry's key.
 
 ---
 
 ## How to remove a resource group
 
-Delete the entry from the `resource_groups` list in [environments/prod/prod.tfvars](environments/prod/prod.tfvars) and raise a PR. Terraform will destroy the resource group and all associated Entra groups, role assignments, and access packages.
+Delete the entry from the `resource_groups` map in [environments/prod/prod.tfvars](environments/prod/prod.tfvars) and raise a PR. Terraform will destroy the resource group and all associated Entra groups, role assignments, and access packages.
 
 > **Warning:** Removing an entry will **destroy all Azure resources** inside that resource group. Make sure any required data has been backed up before merging.
->
-> If the entry is not the last item in the list, removing it will shift the identifiers of all subsequent entries. To avoid unintended changes, consider replacing the entry's values with a placeholder or removing from the end only.
 
 ---
 
@@ -113,7 +112,7 @@ Once added to the Contributor Eligible group, users can request time-limited Con
 
 ## What gets created per entry
 
-For each entry in `resource_groups`, the following resources are created (where `<id>` is the auto-generated 3-digit number, e.g. `001`):
+For each entry in `resource_groups`, the following resources are created (where `<id>` is the 3-digit key you assign, e.g. `001`):
 
 | Resource | Name / Description |
 |---|---|
