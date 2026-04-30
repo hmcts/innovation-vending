@@ -2,8 +2,6 @@ name: New Resource Group Request
 description: Request a new resource group in DTS-INNOVATION-PROD.
 title: "[RG Request]: "
 labels: ["request"]
-assignees:
-  - octocat
 type: request
 body:
   - type: markdown
