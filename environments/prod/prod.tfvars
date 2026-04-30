@@ -6,12 +6,4 @@ resource_groups = {
       email = "Francis.Webb1@justice.gov.uk"
     }
   }
-  "002" = {
-    end_date = "2026-12-31"
-    owner = {
-      team_name = "DTS Platform Operations"
-      name      = "Alex Bance"
-      email     = "alex.bance@justice.gov.uk"
-    }
-  }
 }
