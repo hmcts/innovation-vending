@@ -1,7 +1,7 @@
 name: New Resource Group Request
 description: Request a new resource group in DTS-INNOVATION-PROD.
 title: "[RG Request]: "
-labels: ["request"]
+labels: [ "request" ]
 type: request
 body:
   - type: markdown
@@ -12,7 +12,8 @@ body:
     id: owner
     attributes:
       label: Owner's Name
-      description: Full name of the resource group Owner. This will be used to set up notifications and will act as a point of contact for the resource group.
+      description: Full name of the resource group Owner. This will be used to set up
+        notifications and will act as a point of contact for the resource group.
       placeholder: ex. Joe Blogs
     validations:
       required: true
@@ -20,7 +21,9 @@ body:
     id: owner_email
     attributes:
       label: Owner's Email Address
-      description: Email address of the resource group Owner. This will be used to set up notifications and will act as a point of contact for the resource group.
+      description: Email address of the resource group Owner. This will be used to set
+        up notifications and will act as a point of contact for the resource
+        group.
       placeholder: ex. user.name@justice.gov.uk
     validations:
       required: true
@@ -36,7 +39,8 @@ body:
     id: end_date
     attributes:
       label: Expiry Date
-      description: Date when the Proof of Concept is expected to end. In the format YYYY-MM-DD.
-      placeholder: 2026-12-31
+      description: Date when the Proof of Concept is expected to end. In the format
+        YYYY-MM-DD.
+      placeholder: "2026-12-31"
     validations:
       required: true
