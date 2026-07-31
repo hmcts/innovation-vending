@@ -63,8 +63,8 @@ stages:
           - task: AzureKeyVault@2
             inputs:
               azureSubscription: "DTS-SHAREDSERVICES-PROD"
-              KeyVaultName: "access-packages-kv"
-              SecretsFilter: "client-secret"
+              KeyVaultName: "central-app-reg-kv"
+              SecretsFilter: "access-packages-secret"
               RunAsPreJob: false
           - template: steps/terraform.yaml@cnp-azuredevops-libraries
             parameters:
@@ -76,5 +76,5 @@ stages:
               terraformInitSubscription: ${{ variables.terraformInitSubscription }}
               planCommandOptions: >
                 -var client_id=${{ variables.client_id }} -var
-                client_secret=$(client-secret) -var tenant_id=${{
+                client_secret=$(access-packages-secret) -var tenant_id=${{
                 variables.tenant_id }}
