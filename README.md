@@ -5,6 +5,7 @@ This repository manages vended resource groups in the **DTS-INNOVATION-PROD** Az
 - An Azure resource group (`rg-<id>-innovation-prod`)
 - Entra ID groups for **Contributor** and **Contributor Eligible** access
 - A **Contributor** role assignment scoped to the resource group
+- A **Storage Blob Data Contributor** role assignment scoped to the resource group
 - Membership of the subscription-level **Readers** group
 - An Entra ID **access package** allowing eligible users to self-approve **Contributor** access to their resource group (8 hours per request)
 - A monthly consumption **budget** with email alerts to the owner
@@ -120,6 +121,7 @@ For each entry in `resource_groups`, the following resources are created (where 
 | Contributor Group | `DTS Innovation prod rg-<id>-innovation-prod Contributor SC` |
 | Contributor Eligible Group | `DTS Innovation prod rg-<id>-innovation-prod Contributor Eligible SC` |
 | Contributor Role Assignment | Contributor role scoped to the resource group |
+| Storage Blob Data Contributor Role Assignment | Storage Blob Data Contributor role scoped to the resource group |
 | Subscription Readers membership | Contributor Eligible group added to `DTS Readers (sub:dts-innovation-prod)` |
 | Access Package | Self-approval contributor access (8 hours) |
 | Budget | Monthly consumption budget with alerts at 90% and 100% |
