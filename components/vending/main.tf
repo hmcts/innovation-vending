@@ -31,3 +31,10 @@ resource "azurerm_role_assignment" "contributor" {
   role_definition_name = "Contributor"
   principal_id         = azuread_group.contributor[each.key].object_id
 }
+
+resource "azurerm_role_assignment" "storage_blob_data_contributor" {
+  for_each             = var.resource_groups
+  scope                = azurerm_resource_group.this[each.key].id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = azuread_group.contributor[each.key].object_id
+}
