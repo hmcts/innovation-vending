@@ -39,7 +39,6 @@ resource "azurerm_role_assignment" "storage_blob_data_contributor" {
   principal_id         = azuread_group.contributor[each.key].object_id
 }
 
-# Speech resource is provisioned outside this module; grant is scoped to it directly, not the whole RG.
 data "azurerm_cognitive_account" "speech_001" {
   name                = "spch-001-innovation-${var.env}"
   resource_group_name = azurerm_resource_group.this["001"].name
