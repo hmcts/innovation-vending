@@ -122,6 +122,8 @@ For each entry in `resource_groups`, the following resources are created (where 
 | Contributor Eligible Group | `DTS Innovation prod rg-<id>-innovation-prod Contributor Eligible SC` |
 | Contributor Role Assignment | Contributor role scoped to the resource group |
 | Storage Blob Data Contributor Role Assignment | Storage Blob Data Contributor role scoped to the resource group |
+
+> **Note:** RG `001` also has a one-off **Cognitive Services Speech User** role assignment scoped to the `spch-001-innovation-prod` Speech resource, granted to its Contributor group. This is a specific exception, not applied to every entry.
 | Subscription Readers membership | Contributor Eligible group added to `DTS Readers (sub:dts-innovation-prod)` |
 | Access Package | Self-approval contributor access (8 hours) |
 | Budget | Monthly consumption budget with alerts at 90% and 100% |
