@@ -32,20 +32,23 @@ resource "azurerm_role_assignment" "contributor" {
   principal_id         = azuread_group.contributor[each.key].object_id
 }
 
-resource "azurerm_role_assignment" "storage_blob_data_contributor" {
-  for_each             = var.resource_groups
-  scope                = azurerm_resource_group.this[each.key].id
-  role_definition_name = "Storage Blob Data Contributor"
-  principal_id         = azuread_group.contributor[each.key].object_id
+locals {
+  additional_role_assignments = {
+    for assignment in flatten([
+      for resource_group_key, resource_group in var.resource_groups : [
+        for role_name in resource_group.additional_roles : {
+          resource_group_key = resource_group_key
+          role_name          = role_name
+        }
+      ]
+    ]) : "${assignment.resource_group_key}|${assignment.role_name}" => assignment
+  }
 }
 
-data "azurerm_cognitive_account" "speech_001" {
-  name                = "spch-001-innovation-${var.env}"
-  resource_group_name = azurerm_resource_group.this["001"].name
-}
+resource "azurerm_role_assignment" "additional" {
+  for_each = local.additional_role_assignments
 
-resource "azurerm_role_assignment" "cognitive_services_speech_user_001" {
-  scope                = data.azurerm_cognitive_account.speech_001.id
-  role_definition_name = "Cognitive Services Speech User"
-  principal_id         = azuread_group.contributor["001"].object_id
+  scope                = azurerm_resource_group.this[each.value.resource_group_key].id
+  role_definition_name = each.value.role_name
+  principal_id         = azuread_group.contributor[each.value.resource_group_key].object_id
 }

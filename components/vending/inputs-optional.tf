@@ -6,8 +6,9 @@ variable "resource_groups" {
       name      = string
       email     = string
     })
-    location = optional(string, "uksouth")
-    budget   = optional(number, 1000)
+    location         = optional(string, "uksouth")
+    budget           = optional(number, 1000)
+    additional_roles = optional(set(string), [])
   }))
   default = {}
 }
